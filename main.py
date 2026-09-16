@@ -29,6 +29,26 @@ from tools.flight_tool import search_flights
 from dotenv import load_dotenv
 load_dotenv()
 
+print("STEP 1: Starting main.py")
+
+print("STEP 2: Getting DATABASE_URL")
+
+DATABASE_URL = st.secrets["DATABASE_URL"]
+
+print("STEP 3: DATABASE_URL loaded")
+
+_conn = psycopg.connect(DATABASE_URL, autocommit=True)
+
+print("STEP 4: PostgreSQL connected")
+
+checkpointer = PostgresSaver(_conn)
+
+print("STEP 5: PostgresSaver created")
+
+checkpointer.setup()
+
+print("STEP 6: Checkpointer setup complete")
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # LLM
