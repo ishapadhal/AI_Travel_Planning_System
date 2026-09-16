@@ -51,6 +51,10 @@ checkpointer.setup()
 print("STEP 6: Checkpointer setup complete")
 
 DATABASE_URL = os.getenv("DATABASE_URL")
+print("STEP 7: Creating graph")
+print("STEP 8: Graph created")
+print("STEP 9: Creating LLM")
+print("STEP 10: LLM created")
 
 # LLM
 llm = ChatGroq(
