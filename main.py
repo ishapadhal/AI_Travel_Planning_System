@@ -310,6 +310,16 @@ st.markdown("""
     padding: 20px;
 }
 
+.travel-response {
+    color: #111827 !important;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.travel-response * {
+    color: #111827 !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -427,7 +437,17 @@ if st.button("✨ Plan My Trip"):
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown(result["messages"][-1].content)
+        st.markdown(
+    f"""
+    <div class="result-box">
+        <div class="result-title">🌍 Your Travel Plan</div>
+        <div class="travel-response">
+            {result["messages"][-1].content}
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
     else:
 
