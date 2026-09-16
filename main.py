@@ -7,7 +7,7 @@ CREATE DATABASE langgraph_memory;  ( or open pgadmin4 and create database there 
 # LangGraph Multi-Agent Travel Booking System with Long-Term Memory
 
 # main.py
-
+print("MAIN.PY STARTED")
 import os
 from typing import TypedDict, Annotated
 import operator
