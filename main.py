@@ -55,6 +55,9 @@ print("STEP 7: Creating graph")
 print("STEP 8: Graph created")
 print("STEP 9: Creating LLM")
 print("STEP 10: LLM created")
+print("STEP 11: After LLM setup")
+print("STEP 12: Before app UI")
+print("STEP 13: App UI started")
 
 # LLM
 llm = ChatGroq(
