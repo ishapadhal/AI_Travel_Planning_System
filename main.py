@@ -166,28 +166,247 @@ graph.add_edge("final_agent", END)
 
 
 # Persistent connection so both CLI and Streamlit can share the compiled app
-_conn = psycopg.connect(DATABASE_URL, autocommit=True)
-checkpointer = PostgresSaver(_conn)
-checkpointer.setup()
 
 app = graph.compile(checkpointer=checkpointer)
 
-st.title("✈️ AI Travel Planning System")
+# =========================
+# STREAMLIT UI
+# =========================
 
-user_input = st.text_input(
-    "Where would you like to travel?",
-    placeholder="Example: Plan a 5-day trip from Mumbai to Dubai"
+st.set_page_config(
+    page_title="AI Travel Planner",
+    page_icon="✈️",
+    layout="wide"
 )
 
-if st.button("Plan My Trip"):
+st.markdown("""
+<style>
+
+/* ---------- GLOBAL ---------- */
+.stApp {
+    background: linear-gradient(135deg, #f7f9fc 0%, #eef4ff 100%);
+}
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+    max-width: 1200px;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+    padding: 45px 40px;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.20);
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+.hero p {
+    font-size: 19px;
+    color: #dbeafe;
+    margin-bottom: 0;
+}
+
+/* ---------- FEATURE CARDS ---------- */
+.feature-card {
+    background: white;
+    padding: 22px;
+    border-radius: 18px;
+    text-align: center;
+    height: 140px;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.08);
+    border: 1px solid #e5e7eb;
+}
+
+.feature-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.feature-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.feature-text {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* ---------- INPUT AREA ---------- */
+.input-card {
+    background: white;
+    padding: 30px;
+    border-radius: 22px;
+    margin-top: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+/* ---------- BUTTON ---------- */
+.stButton > button {
+    width: 100%;
+    border-radius: 12px;
+    height: 50px;
+    font-size: 17px;
+    font-weight: 700;
+    border: none;
+    background: linear-gradient(90deg, #2563eb, #4f46e5);
+    color: white;
+    transition: all 0.25s ease;
+}
+
+.stButton > button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.30);
+}
+
+/* ---------- TEXT INPUT ---------- */
+.stTextInput > div > div > input {
+    border-radius: 12px;
+    border: 2px solid #e5e7eb;
+    padding: 14px;
+    font-size: 16px;
+}
+
+.stTextInput > div > div > input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* ---------- RESULT ---------- */
+.result-box {
+    background: white;
+    padding: 30px;
+    border-radius: 22px;
+    margin-top: 25px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10);
+    border-left: 5px solid #2563eb;
+}
+
+.result-title {
+    font-size: 25px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 15px;
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+    text-align: center;
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 50px;
+    padding: 20px;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
+
+# =========================
+# HERO
+# =========================
+
+st.markdown("""
+<div class="hero">
+
+<h1>✈️ AI Travel Planner</h1>
+
+<p>
+Plan flights, discover hotels and generate personalized itineraries
+with the power of AI.
+</p>
+
+</div>
+""", unsafe_allow_html=True)
+
+
+# =========================
+# FEATURES
+# =========================
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">✈️</div>
+        <div class="feature-title">Flight Search</div>
+        <div class="feature-text">Find suitable flights</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">🏨</div>
+        <div class="feature-title">Hotels</div>
+        <div class="feature-text">Discover places to stay</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">🗺️</div>
+        <div class="feature-title">Itinerary</div>
+        <div class="feature-text">Build your trip plan</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col4:
+    st.markdown("""
+    <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title">AI Planner</div>
+        <div class="feature-text">Powered by LLMs</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# =========================
+# INPUT
+# =========================
+
+st.markdown("""
+<div class="input-card">
+<h3>🌎 Where do you want to go?</h3>
+<p style="color:#6b7280;">
+Tell our AI what kind of trip you are planning.
+</p>
+</div>
+""", unsafe_allow_html=True)
+
+
+user_input = st.text_input(
+    "",
+    placeholder="Example: Plan a 5-day trip from Mumbai to Dubai..."
+)
+
+
+if st.button("✨ Plan My Trip"):
+
     if user_input:
+
         config = {
             "configurable": {
                 "thread_id": "streamlit_user"
             }
         }
 
-        with st.spinner("Planning your trip..."):
+        with st.spinner("🤖 AI is planning your perfect trip..."):
+
             result = app.invoke(
                 {
                     "messages": [
@@ -202,35 +421,26 @@ if st.button("Plan My Trip"):
                 config=config
             )
 
-        st.subheader("Your Travel Plan")
+        st.markdown("""
+        <div class="result-box">
+        <div class="result-title">🌍 Your Travel Plan</div>
+        </div>
+        """, unsafe_allow_html=True)
 
-        st.write(result["messages"][-1].content)
+        st.markdown(result["messages"][-1].content)
+
+    else:
+
+        st.warning("Please enter a travel request first.")
 
 
-if __name__ == "__main__":
-    config = {
-        "configurable": {
-            "thread_id": "user_aarohi"
-        }
-    }
+# =========================
+# FOOTER
+# =========================
 
-    user_input = input("Enter travel request: ")
-
-    result = app.invoke(
-        {
-            "messages": [
-                HumanMessage(content=user_input)
-            ],
-            "user_query": user_input,
-            "flight_results": "",
-            "hotel_results": "",
-            "itinerary": "",
-            "llm_calls": 0
-        },
-        config=config
-    )
-
-    print("\nFINAL RESPONSE:\n")
-
-    for msg in result["messages"]:
-        print(msg.content)
+st.markdown("""
+<div class="footer">
+✈️ AI Travel Planning System &nbsp; • &nbsp;
+Powered by LangGraph + Groq + PostgreSQL
+</div>
+""", unsafe_allow_html=True)
