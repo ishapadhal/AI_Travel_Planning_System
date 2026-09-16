@@ -7,7 +7,6 @@ CREATE DATABASE langgraph_memory;  ( or open pgadmin4 and create database there 
 # LangGraph Multi-Agent Travel Booking System with Long-Term Memory
 
 # main.py
-print("MAIN.PY STARTED")
 import os
 import streamlit as st
 from typing import TypedDict, Annotated
@@ -50,7 +49,6 @@ checkpointer.setup()
 
 print("STEP 6: Checkpointer setup complete")
 
-DATABASE_URL = os.getenv("DATABASE_URL")
 print("STEP 7: Creating graph")
 print("STEP 8: Graph created")
 print("STEP 9: Creating LLM")
@@ -58,6 +56,7 @@ print("STEP 10: LLM created")
 print("STEP 11: After LLM setup")
 print("STEP 12: Before app UI")
 print("STEP 13: App UI started")
+
 
 # LLM
 llm = ChatGroq(
@@ -172,6 +171,40 @@ checkpointer = PostgresSaver(_conn)
 checkpointer.setup()
 
 app = graph.compile(checkpointer=checkpointer)
+
+st.title("✈️ AI Travel Planning System")
+
+user_input = st.text_input(
+    "Where would you like to travel?",
+    placeholder="Example: Plan a 5-day trip from Mumbai to Dubai"
+)
+
+if st.button("Plan My Trip"):
+    if user_input:
+        config = {
+            "configurable": {
+                "thread_id": "streamlit_user"
+            }
+        }
+
+        with st.spinner("Planning your trip..."):
+            result = app.invoke(
+                {
+                    "messages": [
+                        HumanMessage(content=user_input)
+                    ],
+                    "user_query": user_input,
+                    "flight_results": "",
+                    "hotel_results": "",
+                    "itinerary": "",
+                    "llm_calls": 0
+                },
+                config=config
+            )
+
+        st.subheader("Your Travel Plan")
+
+        st.write(result["messages"][-1].content)
 
 
 if __name__ == "__main__":
