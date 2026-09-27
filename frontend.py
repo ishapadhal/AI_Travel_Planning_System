@@ -169,6 +169,12 @@ html, body, .stApp {
     margin-bottom: 0.5rem;
 }
 
+.input-title {
+    color: #172033 !important;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
 
 /* ============================================================================
    QUICK DESTINATIONS
@@ -425,21 +431,20 @@ header {
    ============================================================================ */
 
 .stTextArea textarea {
-    background: #0a1520 !important;
-    border: 1px solid #1e2e44 !important;
-    border-radius: 10px !important;
-    color: #e8f4ff !important;
-    font-size: 0.95rem !important;
-    resize: none !important;
+    background: #ffffff !important;
+    color: #172033 !important;
+    border: 2px solid #d7e0ec !important;
+    border-radius: 12px !important;
+    font-size: 1rem !important;
 }
 
 .stTextArea textarea:focus {
-    border-color: #3a7bd5 !important;
-    box-shadow: 0 0 0 2px rgba(58, 123, 213, 0.2) !important;
+    border: 2px solid #3b6ff5 !important;
+    box-shadow: 0 0 0 3px rgba(59, 111, 245, 0.12) !important;
 }
 
 .stTextArea textarea::placeholder {
-    color: #4a6a85 !important;
+    color: #718096 !important;
 }
 
 
