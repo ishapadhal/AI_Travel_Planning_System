@@ -378,7 +378,7 @@ AGENT_META = {
     "flight_agent":    ("✈️", "Flight Agent"),
     "hotel_agent":     ("🏨", "Hotel Agent"),
     "itinerary_agent": ("🗓️", "Itinerary Agent"),
-    "final_agent":     ("🧠", "Final Agent"),
+
 }
 
 if generate:
@@ -424,11 +424,6 @@ if generate:
                         collected["itinerary"] = text
                         st.markdown(text or "_No itinerary generated._")
 
-                    elif node_name == "final_agent":
-                        msgs = state_update.get("messages", [])
-                        text = msgs[-1].content if msgs else ""
-                        collected["final_response"] = text
-                        st.markdown(text or "_No final response._")
 
                     collected["llm_calls"] = state_update.get("llm_calls", collected["llm_calls"])
 
